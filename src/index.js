@@ -13,9 +13,11 @@ const videoRouter= require("./routes/videoCreator");
 
 //if '*' given means the data can be accessed by anyone
 app.use(cors({
-    origin:'http://localhost:5173',  
-    credentials:true
-}))
+    origin: [
+        "http://localhost:5173"
+    ],
+    credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -31,10 +33,11 @@ const initializeConnection= async()=>{
     try{
         await Promise.all([main(),redisClient.connect()]);
         console.log("connected to DB");
-        app.listen(process.env.PORT,()=>
-        {
-            console.log(`listening at the port `+process.env.PORT);
-        })
+        const PORT = process.env.PORT || 1000;
+
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+});
     }
     catch(err)
     {
