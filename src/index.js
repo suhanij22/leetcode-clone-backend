@@ -14,7 +14,8 @@ const videoRouter= require("./routes/videoCreator");
 //if '*' given means the data can be accessed by anyone
 app.use(cors({
     origin: [
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "https://leetcode-clone-frontend-mu.vercel.app"
     ],
     credentials: true
 }));
