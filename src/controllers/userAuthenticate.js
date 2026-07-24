@@ -27,7 +27,12 @@ const register= async (req,res)=>{
 
         //jab user ne register karliya toh usse token mil jayega direct ab
         const token= jwt.sign({_id:user._id, emailId:emailId,role:'user'},process.env.JWT_KEY,{expiresIn:3600}); 
-        res.cookie('token',token,{maxAge:3600*1000});  //maxAge is in milisecond
+        res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 3600 * 1000,
+});  //maxAge is in milisecond
 
         res.status(201).json({
             user:reply,
@@ -72,7 +77,12 @@ const login =async (req,res)=>
 
         //agar koi direct login kar rha toh usse bhi token dena hoga
         const token= jwt.sign({_id:user._id, emailId:emailId,role:user.role},process.env.JWT_KEY,{expiresIn:3600}); 
-        res.cookie('token',token,{maxAge:3600*1000});
+        res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 3600 * 1000,
+});
 
         res.status(200).json({
             user:reply,
@@ -96,7 +106,12 @@ const logout = async(req,res)=>
         const payload=jwt.decode(token);
         await redisClient.set(`token:${token}`,payload.exp);
         //cookies ko phir waha se clear kar denge
-        res.cookie("token",null,{expires: new Date(Date.now())});
+        res.cookie("token", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    expires: new Date(0),
+});
         res.send("logged out successfully");
 
     }  
@@ -122,7 +137,12 @@ const adminRegister=async (req,res)=>
     
         //jab user ne register karliya toh usse token mil jayega direct ab
         const token= jwt.sign({_id:user._id, emailId:emailId,role:user.role},process.env.JWT_KEY,{expiresIn:3600}); 
-        res.cookie('token',token,{maxAge:3600*1000});  //maxAge is in milisecond
+        res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 3600 * 1000,
+});  //maxAge is in milisecond
 
         res.status(201).send("user Registered successfully");
     }
